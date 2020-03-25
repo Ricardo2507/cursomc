@@ -2,20 +2,45 @@ package com.ricardo.cursomc.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.ricardo.cursomc.services.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty(message= "Nome do cliente é de preenchimento orbrigatório")
+	@Length(min=5, max=120, message="O nome deve ter entre 5 e 120 caracteres")
 	private String nome;
+	
+	@NotEmpty(message= "E-mail  do cliente é de preenchimento orbrigatório")
+	@Email(message="E-mail inválido. Corrija-o e tente novamente")
 	private String email;
+	
+	@NotEmpty(message= "CPF/CNPJ do cliente é de preenchimento orbrigatório")
 	private String cpfOuCnpj;
+	
 	private Integer tipo;
 	
+	@NotEmpty(message= "O endereço do cliente é de preenchimento orbrigatório")
 	private String logradouro;
+	
+	@NotEmpty(message= "O número do imóvel é de preenchimento orbrigatório")
 	private String numero;
+	
 	private String complemento;
+	
+	
 	private String bairro;
+	
+	@NotEmpty(message= "O CEP é de preenchimento orbrigatório")
 	private String cep;
 	
+	@NotEmpty(message= "Informe pelo menos um telefone para do cliente")
 	private String telefone1;
 	private String telefone2;
 	private String telefone3;
