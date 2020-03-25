@@ -39,8 +39,15 @@ public class CategoriaService {
 	}
 
 	public Categoria update(Categoria obj) {
-		find(obj.getId()); // verificar se categoria existe
-		return repo.save(obj);
+		Categoria newObj = find(obj.getId()); // verificar se cliente existe
+		updateData(newObj, obj);
+		return repo.save(newObj);
+	}
+
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
+		
+		
 	}
 
 	// tratamento para entidades que tem filhos
