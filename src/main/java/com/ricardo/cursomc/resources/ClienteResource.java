@@ -1,5 +1,6 @@
 package com.ricardo.cursomc.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,9 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 import com.ricardo.cursomc.domain.Cliente;
+
 import com.ricardo.cursomc.dto.ClienteDTO;
+import com.ricardo.cursomc.dto.ClienteNewDTO;
 import com.ricardo.cursomc.services.ClienteService;
 
 @RestController
@@ -27,6 +32,20 @@ public class ClienteResource {
 		Cliente obj = service.find(id);
 
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDTO) {
+		Cliente obj = service.fromDTO(objDTO);
+		obj = service.insert(obj);
+		// boa prática - tratar os códigos de resposta -201 - A requisição foi bem
+		// sucedida e
+		// um novo recurso foi criado como resultado. Esta é uma tipica resposta enviada
+		// após uma requisição POST.
+		// o método fromCurrentRequestUri() pega a URL que usamos para inserir
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+
+		return ResponseEntity.created(uri).build();
 	}
 	
 	
