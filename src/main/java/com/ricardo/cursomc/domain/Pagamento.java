@@ -11,7 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ricardo.cursomc.domain.enums.EstadoPagamento;
 
 // usamos @Inheritance para mapear herança
@@ -32,7 +33,7 @@ public abstract class Pagamento implements Serializable {
 	// coluna correspondente a pedido, para identificar no BD o campo que maeia com Pedido
 	// para garantir que o id seja o mesmo coloamos a anotação MapsID
 	
-	@JsonBackReference
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name="pedido_id")
 	@MapsId
