@@ -58,6 +58,7 @@ public class Pedido implements Serializable {
 		
 	}
 
+	// o endereco do pedido é o endereço de entrega
 	public Pedido(Integer id, Date instante, Cliente cliente, Endereco endereco) {
 		super();
 		this.id = id;

@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ricardo.cursomc.domain.enums.EstadoPagamento;
 
 // usamos @Inheritance para mapear herança
@@ -22,6 +23,7 @@ import com.ricardo.cursomc.domain.enums.EstadoPagamento;
 // A super não pode ser instanciada
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
+@JsonTypeInfo(use =JsonTypeInfo.Id.NAME, include =JsonTypeInfo.As.PROPERTY, property ="@type")
 public abstract class Pagamento implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

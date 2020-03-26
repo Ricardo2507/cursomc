@@ -1,8 +1,14 @@
 package com.ricardo.cursomc.resources;
 
+import java.net.URI;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ricardo.cursomc.domain.Pedido;
 import com.ricardo.cursomc.services.PedidoService;
@@ -21,5 +27,20 @@ public class PedidoResource {
 
 		return ResponseEntity.ok().body(obj);
 	}
+
+	// função que vai receber em formato Json, e com a anotação transformará em um
+	// objeto se ela for valido.
+	// CRIANDO um pedido
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody Pedido obj) {
+		obj = service.insert(obj);
+
+		// Retorna uma URI do novo objeto inserido
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+
+		return ResponseEntity.created(uri).build();
+	}
+
+	
 
 }
