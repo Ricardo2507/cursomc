@@ -31,6 +31,7 @@ public class ClienteService {
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 
+	//Faz a busca no repositório com base no id
 	public Cliente find(Integer id) {
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
@@ -49,6 +50,7 @@ public class ClienteService {
 	// atualiza cliente
 	public Cliente update(Cliente obj) {
 		Cliente newObj = find(obj.getId()); // verificar se cliente existe
+		//Atualiza os campos do cliente antigo com base no novo objeto
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
@@ -99,11 +101,14 @@ public class ClienteService {
 
 		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(),
 				objDTO.getBairro(), objDTO.getCep(), cli, cid);
+		
 		cli.getEnderecos().add(end);
 		cli.getTelefones().add(objDTO.getTelefone1());
+		
 		if (objDTO.getTelefone2() != null) {
 			cli.getTelefones().add(objDTO.getTelefone2());
 		}
+		
 		if (objDTO.getTelefone3() != null) {
 			cli.getTelefones().add(objDTO.getTelefone3());
 		}

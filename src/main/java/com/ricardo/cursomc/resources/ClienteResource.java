@@ -26,6 +26,9 @@ public class ClienteResource {
 	@Autowired
 	private ClienteService service;
 
+	 //Associando a função ao Rest com método de get.
+	 //O value é o id que será informado na hora de buscar alguma informação
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Cliente> find(@PathVariable Integer id) {
 
@@ -66,7 +69,11 @@ public class ClienteResource {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll() {
 
+		//FindAll retorna uma LISTA de clientes
 		List<Cliente> list = service.findAll();
+		
+		//Faz uma lista secundaria, que vai "mapear" cada item da lista objs 
+		//será criado um clienteDTO, depois o collect transforma em lista
 		List<ClienteDTO> listDTO = list.stream().map(obj -> new ClienteDTO(obj)).collect(Collectors.toList());
 
 		return ResponseEntity.ok().body(listDTO);
