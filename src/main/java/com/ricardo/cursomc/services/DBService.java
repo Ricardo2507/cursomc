@@ -71,6 +71,8 @@ public class DBService {
 		Categoria cat5 = new Categoria(null, "Jardinagem");
 		Categoria cat6 = new Categoria(null, "Decoração");
 		Categoria cat7 = new Categoria(null, "Perfumaria");
+		Categoria cat8 = new Categoria(null, "Teste");
+		Categoria cat9 = new Categoria(null, "Teste1");
 				
 
 		Produto p1 = new Produto(null, "Computador", 2000.00);
@@ -83,7 +85,7 @@ public class DBService {
 		Produto p8 = new Produto(null, "Roçadeira", 800.00);
 		Produto p9 = new Produto(null, "Abajour", 100.00);
 		Produto p10 = new Produto(null, "Pendente", 180.00);
-		Produto p11 = new Produto(null, "Shappo", 800.00);
+		Produto p11 = new Produto(null, "Shappom", 800.00);
 		
 		
 
@@ -108,7 +110,7 @@ public class DBService {
 		p11.getCategorias().addAll(Arrays.asList(cat7));
 		
 		
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
 
 		Estado est1 = new Estado(null, "Minas Gerais");
