@@ -1,6 +1,7 @@
 package com.ricardo.cursomc.services;
 
 import org.apache.logging.log4j.message.SimpleMessage;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 
@@ -10,9 +11,11 @@ import com.ricardo.cursomc.domain.Pedido;
 @Service
 public interface EmailService {
 
-	void sandOrderConfirmationEmail(Pedido pedido);
+	// operações que o serviço de e-mail deve oferecer
 	
-	void sandEmail(SimpleMessage email);
+	void sendOrderConfirmationEmail(Pedido pedido);
 	
-	void sandNewPasswordEmail(Cliente cliente, String newPass);
+	void sendEmail(SimpleMailMessage msg);
+	
+	void sendNewPasswordEmail(Cliente cliente, String newPass);
 }
