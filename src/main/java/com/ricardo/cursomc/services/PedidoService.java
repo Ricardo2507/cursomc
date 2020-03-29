@@ -40,6 +40,10 @@ public class PedidoService {
 	@Autowired
 	private ClienteService clienteService;
 	
+	// EmailService é uma interface
+	// temos que detrrminar onde ela será instanciada como MocKEmailService
+	// faremos isso no TestConfig, onde são definidas as configurações de teste
+	
 	@Autowired
 	private EmailService emailService;
 
@@ -76,6 +80,7 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
+		// envia e=mail após novo pedido
 		emailService.sendOrderConfirmationEmail(obj);
 		return obj;
 	}
