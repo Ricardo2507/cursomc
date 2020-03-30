@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 import com.ricardo.cursomc.services.DBService;
 import com.ricardo.cursomc.services.EmailService;
 import com.ricardo.cursomc.services.MockEmailService;
-import com.ricardo.cursomc.services.SmtpEmailService;
+
 
 @Configuration
 @Profile("test")

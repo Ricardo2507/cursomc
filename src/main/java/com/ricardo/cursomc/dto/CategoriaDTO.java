@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.ricardo.cursomc.domain.Categoria;
 
-// definie os dados que queremos trafegar quando fizermos operações com categoria
+// define os dados que queremos trafegar quando fizermos operações com categoria
 
 
 public class CategoriaDTO implements Serializable {

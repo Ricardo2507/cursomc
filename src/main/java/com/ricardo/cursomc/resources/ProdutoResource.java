@@ -41,6 +41,7 @@ public class ProdutoResource {
 	public ResponseEntity<Page<ProdutoDTO>> findPage(
 			// Usa parâmetros opcionais, primeiro definimos qual é a variável que vai
 			// receber o valor e depois passamos um valor padrão
+			// parâmetro de url é String
 			@RequestParam(value = "nome", defaultValue = "") String nome,
 			@RequestParam(value = "categoria", defaultValue = "") String categoria,
 			@RequestParam(value = "page", defaultValue = "0") Integer page,

@@ -32,17 +32,19 @@ DOCTYPE html>
 				<td th:text="${item.produto.nome}">nome</td>
 				<td th:text="${item.quantidade}">quantidade</td>
 				<td
-					th:text="${#numbers.formatDecimal(item.preco, 0, 'POINT', 2,
-									'COMMA')}">preco</td>
+						th:text="|R$ ${#numbers.formatDecimal(item.preco, 0, 'POINT', 2,
+									'COMMA')}|">preco</td>
 				<td
-					th:text="${#numbers.formatDecimal(item.subTotal, 0, 'POINT', 2,
-									'COMMA')}">subTotal</td>
-			</tr>
+				
+					th:text=" |R$ ${#numbers.formatDecimal(item.subTotal, 0, 'POINT', 2,
+									'COMMA')}|" >subTotal</td>
+					<!-- 				    th:text="|R$ ${{item.subTotal}}|">subTotal </td> -->
+			
 		</table>
 		<p>
 			Valor total: <span
-				th:text="${#numbers.formatDecimal(pedido.valorTotal, 0,
-									'POINT', 2, 'COMMA')}"></span>
+				th:text=" |R$ ${#numbers.formatDecimal(pedido.valorTotal, 0,
+									'POINT', 2, 'COMMA')}|"></span>
 		</p>
 	</div>
 </body>

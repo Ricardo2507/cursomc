@@ -80,6 +80,7 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
+		
 		// envia e=mail após novo pedido
 		emailService.sendOrderConfirmationHtmlEmail(obj);
 		return obj;

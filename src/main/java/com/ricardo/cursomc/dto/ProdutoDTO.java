@@ -13,6 +13,7 @@ public class ProdutoDTO implements Serializable{
 
     public ProdutoDTO() {
     }
+    
     public ProdutoDTO(Produto produto) {
         id = produto.getId();
         nome = produto.getNome();

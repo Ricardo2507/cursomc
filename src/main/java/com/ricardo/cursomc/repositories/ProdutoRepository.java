@@ -20,7 +20,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
 	// Faz uma busca com o JPQL para retornar uma página de produtos
 	// cat é o nome de referencia do obj.categoria
-    // a query se sobrepõe à consulta do sping data
+    // a query se sobrepõe à consulta do spring data
 	@Transactional(readOnly = true)
 	@Query("SELECT DISTINCT obj FROM Produto obj INNER JOIN obj.categorias cat WHERE obj.nome LIKE %:nome% AND cat IN :categorias")
 
