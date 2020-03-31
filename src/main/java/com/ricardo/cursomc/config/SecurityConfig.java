@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.ricardo.cursomc.security.JWTAuthenticationFilter;
+import com.ricardo.cursomc.security.JWTAuthorizationFilter;
 import com.ricardo.cursomc.security.JWTUtil;
 
 @Configuration
@@ -70,12 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated();
 		
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		//Anotação para informar que o back-end não criará estados
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 							
 
 	}
 	
+	@Override
 	public void configure(AuthenticationManagerBuilder auth)  throws  Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
