@@ -4,10 +4,13 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ricardo.cursomc.domain.Cliente;
 import com.ricardo.cursomc.domain.ItemPedido;
 import com.ricardo.cursomc.domain.PagamentoComBoleto;
 import com.ricardo.cursomc.domain.Pedido;
@@ -15,11 +18,16 @@ import com.ricardo.cursomc.domain.enums.EstadoPagamento;
 import com.ricardo.cursomc.repositories.ItemPedidoRepository;
 import com.ricardo.cursomc.repositories.PagamentoRepository;
 import com.ricardo.cursomc.repositories.PedidoRepository;
-
+import com.ricardo.cursomc.security.UserSS;
+import com.ricardo.cursomc.services.exceptions.AuthorizationException;
 import com.ricardo.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class PedidoService {
+	
+	
+	@Autowired
+	private PedidoRepository repo;
 
 	// Essa anotação Autowired instância automaticamente a classe PedidoRepository
 	@Autowired
@@ -84,6 +92,16 @@ public class PedidoService {
 		// envia e=mail após novo pedido
 		emailService.sendOrderConfirmationHtmlEmail(obj);
 		return obj;
+	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente =  clienteService.find(user.getId());
+		return repo.findByCliente(cliente, pageRequest);
 	}
 
 }
