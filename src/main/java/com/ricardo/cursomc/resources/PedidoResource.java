@@ -10,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ricardo.cursomc.domain.Categoria;
 import com.ricardo.cursomc.domain.Pedido;
-import com.ricardo.cursomc.dto.CategoriaDTO;
 import com.ricardo.cursomc.services.PedidoService;
 
 @RestController
