@@ -30,8 +30,7 @@ import com.ricardo.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ClienteService {
-	
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bpe;
 
@@ -40,19 +39,19 @@ public class ClienteService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-	
+
 	@Autowired
 	private S3Service s3Service;
 
-	//Faz a busca no repositório com base no id
+	// Faz a busca no repositório com base no id
 	public Cliente find(Integer id) {
-		
+
 		// pegar usuário logado
 		UserSS user = UserService.authenticated();
 		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
-				throw new AuthorizationException("Acesso negado");
+			throw new AuthorizationException("Acesso negado");
 		}
-		
+
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
@@ -70,7 +69,7 @@ public class ClienteService {
 	// atualiza cliente
 	public Cliente update(Cliente obj) {
 		Cliente newObj = find(obj.getId()); // verificar se cliente existe
-		//Atualiza os campos do cliente antigo com base no novo objeto
+		// Atualiza os campos do cliente antigo com base no novo objeto
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
@@ -121,14 +120,14 @@ public class ClienteService {
 
 		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(),
 				objDTO.getBairro(), objDTO.getCep(), cli, cid);
-		
+
 		cli.getEnderecos().add(end);
 		cli.getTelefones().add(objDTO.getTelefone1());
-		
+
 		if (objDTO.getTelefone2() != null) {
 			cli.getTelefones().add(objDTO.getTelefone2());
 		}
-		
+
 		if (objDTO.getTelefone3() != null) {
 			cli.getTelefones().add(objDTO.getTelefone3());
 		}
@@ -136,10 +135,24 @@ public class ClienteService {
 		return cli;
 
 	}
-	
-	//método específico para upload da fot do cliente 
+
+	// método específico para upload da fot do cliente
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		return s3Service.uploadFile(multipartFile);
-	}
+		
+		// pegar usuário logado
+		UserSS user = UserService.authenticated();
+	
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		URI uri = s3Service.uploadFile(multipartFile);
+		
+		Cliente cli = repo.findByEmail(user.getUsername());
+		cli.setImageUrl(uri.toString())	;
+		repo.save(cli);
+				
+		return uri;
+}
 
 }
