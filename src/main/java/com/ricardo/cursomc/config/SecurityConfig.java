@@ -28,39 +28,35 @@ import com.ricardo.cursomc.security.JWTUtil;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
 	@Autowired
 	private Environment env;
-	
+
 	@Autowired
 	private JWTUtil jwtUtil;
-	
+
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	// definiremos nesse vetor quais caminhos estão liberados
 	// a princípio tudo que vier após /"h2-console/**" está liberado
-	
-	
-	private static final String[] PUBLIC_MATCHERS = {"/h2-console/**"};
-	
-	private static final String[] PUBLIC_MATCHERS_GET = {"/produtos/**", "/categorias/**", "/estados/**"};
-	
-	private static final String[] PUBLIC_MATCHERS_POST = {"/clientes/**", "/auth/forgot/**"};
+
+	private static final String[] PUBLIC_MATCHERS = { "/h2-console/**" };
+
+	private static final String[] PUBLIC_MATCHERS_GET = { "/produtos/**", "/categorias/**", "/estados/**" };
+
+	private static final String[] PUBLIC_MATCHERS_POST = { "/clientes/**", "/auth/forgot/**" };
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 		// Corrige o problema ao tentar acessar o banco de dados h2
 		// caso estejamos no profile=test, queremos acessar o H2
-		
-		  if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
-			  http.headers().frameOptions().disable();
-		  
-		  }
-		 
-	
-		
+
+		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+			http.headers().frameOptions().disable();
+
+		}
+
 		// para ativar o método CorsConfigurationSource
 		// desabilitar a proteção de ataques CSRF em sistemas stateless.
 		http.cors().and().csrf().disable();
@@ -69,43 +65,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// Public_Matchers
 		// Os caminhos do Public_Matchers apenas possibilitará realizar o get como
 		// requisição
-		http.authorizeRequests()
-			.antMatchers(PUBLIC_MATCHERS).permitAll()
-			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
-			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-			.anyRequest().authenticated();
-		
+		http.authorizeRequests().antMatchers(PUBLIC_MATCHERS).permitAll()
+				.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+				.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll().anyRequest().authenticated();
+
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
-		//Anotação para informar que o back-end não criará estados
+		// Anotação para informar que o back-end não criará estados
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-							
 
 	}
-	
+
 	@Override
-	public void configure(AuthenticationManagerBuilder auth)  throws  Exception {
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
-	
 
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
-		/*
-		 * CorsConfiguration configuration = new
-		 * CorsConfiguration().applyPermitDefaultValues();
-		 * configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE",
-		 * "OPTIONS"));
-		 */
+		// Liberando CORS para PUT e DELETE
+		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		source.registerCorsConfiguration("/**", configuration);
 		return source;
 
 	}
-	
+
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		
+
 		return new BCryptPasswordEncoder();
 	}
 
