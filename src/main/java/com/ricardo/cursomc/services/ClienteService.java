@@ -44,16 +44,17 @@ public class ClienteService {
 
 	@Autowired
 	private S3Service s3Service;
-	
+
 	@Autowired
 	private ImageService imageService;
-	
+
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
+
 	
-	/*
-	 * @Value("${img.profile.size}") private Integer size;
-	 */
+	  @Value("${img.profile.size}")
+	  private Integer size;
+	 
 
 	// Faz a busca no repositório com base no id
 	public Cliente find(Integer id) {
@@ -157,10 +158,10 @@ public class ClienteService {
 		}
 
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
-		/*
-		 * jpgImage = imageService.cropImageEmQuadro(jpgImage); jpgImage =
-		 * imageService.resize(jpgImage, size);
-		 */
+
+		// recorta e redimensiona a imagem
+		jpgImage = imageService.cropImageEmQuadro(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
 
 		String fileName = prefix + user.getId() + ".jpg";
 
